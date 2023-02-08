@@ -1,0 +1,6 @@
+python prepare_align.py config/LJSpeech/preprocess.yaml
+mfa align --clean "C:\Users\Pavel\Desktop\VKR\test4 - fastspeech2\raw_data\rus\rus" russian_mfa russian_mfa "C:\Users\Pavel\Desktop\VKR\test4 - fastspeech2\preprocessed_data\rus"
+python preprocess.py config/LJSpeech/preprocess.yaml
+python train.py -p config/LJSpeech/preprocess.yaml -m config/LJSpeech/model.yaml -t config/LJSpeech/train.yaml
+tensorboard --logdir output/log/LJSpeech
+python3 synthesize.py --text "YOUR_DESIRED_TEXT" --restore_step 900000 --mode single -p config/LJSpeech/preprocess.yaml -m config/LJSpeech/model.yaml -t config/LJSpeech/train.yaml
