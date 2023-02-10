@@ -12,6 +12,8 @@ from tqdm import tqdm
 
 import audio as Audio
 
+import io
+
 
 class Preprocessor:
     def __init__(self, config):
@@ -175,7 +177,8 @@ class Preprocessor:
         ].astype(np.float32)
 
         # Read raw text
-        with open(text_path, "r") as f:
+        with open(text_path, mode="r", encoding='utf-8') as f:
+            #print(text_path)
             raw_text = f.readline().strip("\n")
 
         # Compute fundamental frequency

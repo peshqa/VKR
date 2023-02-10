@@ -2,7 +2,7 @@ dataset: "rus"
 
 path:
   corpus_path: "C:/Users/Pavel/Downloads/rus"
-  lexicon_path: "lexicon/rus-lexicon.txt"
+  lexicon_path: "C:/Users/Pavel/Documents/MFA/pretrained_models/dictionary/russian_mfa.dict"
   raw_path: "./raw_data/rus"
   preprocessed_path: "./preprocessed_data/rus"
 

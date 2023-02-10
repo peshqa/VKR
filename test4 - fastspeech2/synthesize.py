@@ -19,17 +19,43 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def read_lexicon(lex_path):
     lexicon = {}
-    with open(lex_path) as f:
+    with open(lex_path, encoding='utf-8') as f:
         for line in f:
             temp = re.split(r"\s+", line.strip("\n"))
             word = temp[0]
-            phones = temp[1:]
+            phones = temp[5:]
             if word.lower() not in lexicon:
                 lexicon[word.lower()] = phones
     return lexicon
 
 
 def preprocess_english(text, preprocess_config):
+    text = text.rstrip(punctuation)
+    lexicon = read_lexicon(preprocess_config["path"]["lexicon_path"])
+
+    g2p = G2p()
+    phones = []
+    words = re.split(r"([,;.\-\?\!\s+])", text)
+    for w in words:
+        if w.lower() in lexicon:
+            phones += lexicon[w.lower()]
+        else:
+            phones += list(filter(lambda p: p != " ", g2p(w)))
+    phones = "{" + "}{".join(phones) + "}"
+    phones = re.sub(r"\{[^\w\s]?\}", "{sp}", phones)
+    phones = phones.replace("}{", " ")
+
+    print("Raw Text Sequence: {}".format(text))
+    print("Phoneme Sequence: {}".format(phones))
+    sequence = np.array(
+        text_to_sequence(
+            phones, preprocess_config["preprocessing"]["text"]["text_cleaners"]
+        )
+    )
+
+    return np.array(sequence)
+    
+def preprocess_russian(text, preprocess_config):
     text = text.rstrip(punctuation)
     lexicon = read_lexicon(preprocess_config["path"]["lexicon_path"])
 
@@ -206,6 +232,8 @@ if __name__ == "__main__":
             texts = np.array([preprocess_english(args.text, preprocess_config)])
         elif preprocess_config["preprocessing"]["text"]["language"] == "zh":
             texts = np.array([preprocess_mandarin(args.text, preprocess_config)])
+        elif preprocess_config["preprocessing"]["text"]["language"] == "ru":
+            texts = np.array([preprocess_russian(args.text, preprocess_config)])
         text_lens = np.array([len(texts[0])])
         batchs = [(ids, raw_texts, speakers, texts, text_lens, max(text_lens))]
 
