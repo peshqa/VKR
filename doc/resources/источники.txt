@@ -1,2 +1,3 @@
 Audio Signal Processing for Machine Learning - https://www.youtube.com/playlist?list=PL-wATfeyAMNqIee7cH3q1bh4QJFAaeNv0
 Fundamentals of Music Processing - https://link.springer.com/content/pdf/bfm:978-3-030-69808-9/1.pdf
+[ИАД, 2022] Обработка аудио - https://www.youtube.com/playlist?list=PLk4h7dmY2eYHfxOR8PO_v6nu5crh6tMG-
