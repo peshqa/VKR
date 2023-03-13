@@ -6,14 +6,14 @@ import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import java.io.IOException;
 
@@ -76,13 +76,17 @@ public class AudioRecordTest extends AppCompatActivity {
         player.release();
         player = null;
     }
-
     private void startRecording() {
+        // TODO: experiment with audio recording settings
+        // https://stackoverflow.com/questions/14645850/what-is-good-setaudioencodingbitrate-on-record-voice
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.OGG);
+        recorder.setAudioChannels(1);
+        recorder.setAudioSamplingRate(22050);
+        recorder.setAudioEncodingBitRate(192000);
         recorder.setOutputFile(fileName);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.OPUS);
 
         try {
             recorder.prepare();
@@ -149,7 +153,7 @@ public class AudioRecordTest extends AppCompatActivity {
 
         // Record to the external cache directory for visibility
         fileName = getExternalCacheDir().getAbsolutePath();
-        fileName += "/audiorecordtest.3gp";
+        fileName += "/audiorecordtest.ogg";
 
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
